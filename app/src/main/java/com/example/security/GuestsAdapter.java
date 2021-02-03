@@ -1,5 +1,6 @@
 package com.example.security;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +14,42 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 
-public class GuestsAdapter extends FirebaseRecyclerAdapter<Model, GuestsAdapter.viewHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public GuestsAdapter(@NonNull FirebaseRecyclerOptions<Model> options) {
-        super(options);
+public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder> {
+
+    private List<Model> modelList;
+    private MainActivity context;
+
+//    public GuestsAdapter(@NonNull FirebaseRecyclerOptions<Model> options) {
+//        super(options);
+//    }
+
+    public GuestsAdapter(List<Model> modelList, MainActivity context){
+        this.modelList = modelList;
+        this.context = context;
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull Model model) {
-        holder.fname.setText(model.getFname());
-        holder.time.setText(model.getDate());
-        holder.reason.setText(model.getReason());
-        holder.who_add.setText(model.getAdd());
+//    @Override
+//    protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull Model model) {
+//        Model item = modelList.get(position);
+//
+//        holder.fname.setText(model.getFname());
+//        holder.time.setText(model.getDate());
+//        holder.reason.setText(model.getReason());
+//        holder.who_add.setText(model.getAdd());
+//
+////        holder.btn_del.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                DatabaseReference item = getRef(position);
+////                        item.removeValue();
+////            }
+////        });
+//    }
 
-        holder.btn_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference item = getRef(position);
-                        item.removeValue();
-            }
-        });
-    }
-
-    class viewHolder extends RecyclerView.ViewHolder{
+    public class viewHolder extends RecyclerView.ViewHolder{
         TextView fname, time, reason, who_add;
         Button btn_del;
 
@@ -55,5 +69,20 @@ public class GuestsAdapter extends FirebaseRecyclerAdapter<Model, GuestsAdapter.
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_tasks, parent, false);
         return new viewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
+        Model item = modelList.get(position);
+
+        holder.fname.setText(item.getFname());
+        holder.time.setText(item.getDate());
+        holder.reason.setText(item.getReason());
+        holder.who_add.setText(item.getAdd());
+    }
+
+    @Override
+    public int getItemCount() {
+        return modelList.size();
     }
 }

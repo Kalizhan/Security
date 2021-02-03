@@ -40,6 +40,7 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
 //    EditText date_in;
 //    EditText time_in;
     EditText date_time_in, et_name;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +57,26 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
 //        date_in=findViewById(R.id.date_input);
 //        time_in=findViewById(R.id.time_input);
         date_time_in=findViewById(R.id.date_time_input);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
-                Map<String, Object> map = new HashMap<>();
-                map.put("Full name", et_name.getText().toString());
-                map.put("Time", date_time_in.getText().toString());
-                map.put("Reason", spinner1.getSelectedItem().toString());
-                map.put("Who Add", spinner2.getSelectedItem().toString());
+//                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
+                Model model = new Model(et_name.getText().toString(), date_time_in.getText().toString(),
+                        spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
 
-                databaseReference.setValue(map);
+                String mkey = databaseReference.child("Guests").push().getKey();
+                databaseReference.child("Guests").child(mkey).setValue(model);
+
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("Full name", et_name.getText().toString());
+//                map.put("Time", date_time_in.getText().toString());
+//                map.put("Reason", spinner1.getSelectedItem().toString());
+//                map.put("Who Add", spinner2.getSelectedItem().toString());
+//
+//                databaseReference.setValue(map);
             }
         });
 

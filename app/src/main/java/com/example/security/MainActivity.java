@@ -15,9 +15,16 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     GuestsAdapter adapter;
+    FirebaseDatabase database;
+    ArrayList<Model> modelArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
         recyclerView = findViewById(R.id.list);
+        modelArrayList = new ArrayList<>();
+        adapter =new GuestsAdapter(modelArrayList, this);
+        recyclerView.setAdapter(adapter);
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         setSupportActionBar(toolbar);
 
@@ -45,36 +59,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+//        database = FirebaseDatabase.getInstance().getReference().child("Guests").push();
+
         fetch();
     }
 
     private void fetch() {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Guests");
+//        Query query = FirebaseDatabase.getInstance().getReference().child("Tasks");
+//
+//        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>().setQuery(query, new SnapshotParser<Model>() {
+//            @NonNull
+//            @Override
+//            public Model parseSnapshot(@NonNull DataSnapshot snapshot) {
+//                return new Model(snapshot.child("Full name").getValue().toString(),
+//                        snapshot.child("Reason").getValue().toString(),
+//                        snapshot.child("Time").getValue().toString(),
+//                        snapshot.child("Who Add").getValue().toString());
+//            }
+//        }).build();
+//        Query query = FirebaseDatabase.getInstance().getReference().child("Guests");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
-                .setQuery(query, Model.class)
-                .build();
+        databaseReference.child("Guests").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot guestData : snapshot.getChildren()){
+                        Model model = guestData.getValue(Model.class);
+                        modelArrayList.add(model);
+                    }
 
-        linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
+                    adapter.notifyDataSetChanged();
 
-        adapter = new GuestsAdapter(options);
-        recyclerView.setAdapter(adapter);
+                    Log.i("DB", "go");
+                }
+            }
 
-        Log.i("DB", "go");
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("DB", "error");
+            }
+        });
+
+//        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
+//                .setQuery(query, Model.class)
+//                .build();
+
+//        linearLayoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//
+//        adapter = new GuestsAdapter(options);
+//        recyclerView.setAdapter(adapter);
+//
+//        Log.i("DB", "go");
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        adapter.startListening();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        adapter.stopListening();
+//    }
 
     @Override
     public void onBackPressed() {
