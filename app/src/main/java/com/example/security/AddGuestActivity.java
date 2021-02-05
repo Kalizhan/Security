@@ -67,7 +67,7 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
                 Model model = new Model(et_name.getText().toString(), date_time_in.getText().toString(),
                         spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
 
-                String mkey = databaseReference.child("Guests").push().getKey();
+                String mkey = databaseReference.child("Guests/").push().getKey();
                 databaseReference.child("Guests").child(mkey).setValue(model);
 
 //                Map<String, Object> map = new HashMap<>();
