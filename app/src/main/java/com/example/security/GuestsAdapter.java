@@ -50,12 +50,13 @@ public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder
 //    }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-        TextView fname, time, reason, who_add;
+        TextView fname, day, time, reason, who_add;
 //        Button btn_del;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             fname = itemView.findViewById(R.id.fname);
+            day = itemView.findViewById(R.id.day);
             time = itemView.findViewById(R.id.time);
             reason = itemView.findViewById(R.id.reason);
             who_add = itemView.findViewById(R.id.who_add);
@@ -76,7 +77,8 @@ public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder
         Model item = modelList.get(position);
 
         holder.fname.setText(item.getFname());
-        holder.time.setText(item.getDate());
+        holder.day.setText(item.getDay());
+        holder.time.setText(item.getTime());
         holder.reason.setText(item.getReason());
         holder.who_add.setText(item.getAdd());
     }

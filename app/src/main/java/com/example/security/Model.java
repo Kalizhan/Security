@@ -3,15 +3,16 @@ package com.example.security;
 import android.widget.Spinner;
 
 public class Model {
-    String fname, date, reason, add;
+    String fname, day, time, reason, add;
 
     Model() {
 
     }
 
-    public Model(String fname, String date, String reason, String add) {
+    public Model(String fname, String day, String time, String reason, String add) {
         this.fname = fname;
-        this.date = date;
+        this.day = day;
+        this.time = time;
         this.reason = reason;
         this.add = add;
     }
@@ -24,12 +25,20 @@ public class Model {
         this.fname = fname;
     }
 
-    public String getDate() {
-        return date;
+    public String getDay() {
+        return day;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getReason() {

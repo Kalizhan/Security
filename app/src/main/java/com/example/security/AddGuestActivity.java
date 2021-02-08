@@ -37,9 +37,10 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
     Toolbar toolbar;
     Spinner spinner1, spinner2;
     Button button;
-//    EditText date_in;
-//    EditText time_in;
-    EditText date_time_in, et_name;
+    EditText date_in;
+    EditText time_in;
+    EditText date_time_in;
+    EditText et_name;
     DatabaseReference databaseReference;
 
     @Override
@@ -54,9 +55,9 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
         button = findViewById(R.id.btn);
-//        date_in=findViewById(R.id.date_input);
-//        time_in=findViewById(R.id.time_input);
-        date_time_in=findViewById(R.id.date_time_input);
+        date_in=findViewById(R.id.date_input);
+        time_in=findViewById(R.id.time_input);
+//        date_time_in=findViewById(R.id.date_time_input);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
@@ -64,11 +65,11 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
 //                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
-                Model model = new Model(et_name.getText().toString(), date_time_in.getText().toString(),
+                Model model = new Model(et_name.getText().toString(), date_in.getText().toString(), time_in.getText().toString(),
                         spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
 
                 String mkey = databaseReference.child("Guests/").push().getKey();
-                databaseReference.child("Guests").child(mkey).setValue(model);
+                databaseReference.child("Guests").child(date_in.getText().toString()).child(mkey).setValue(model);
 
 //                Map<String, Object> map = new HashMap<>();
 //                map.put("Full name", et_name.getText().toString());
@@ -101,92 +102,92 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         
-        date_time_in.setInputType(InputType.TYPE_NULL);
-//        date_in.setInputType(InputType.TYPE_NULL);
-//        time_in.setInputType(InputType.TYPE_NULL);
+//        date_time_in.setInputType(InputType.TYPE_NULL);
+        date_in.setInputType(InputType.TYPE_NULL);
+        time_in.setInputType(InputType.TYPE_NULL);
 
-//        date_in.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDateDialog(date_in);
-//            }
-//        });
-//
-//        time_in.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showTimeDialog(time_in);
-//            }
-//        });
-
-        date_time_in.setOnClickListener(new View.OnClickListener() {
+        date_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDateTimeDialog(date_time_in);
+                showDateDialog(date_in);
             }
         });
-    }
 
-    private void showDateTimeDialog(EditText date_time_in) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+        time_in.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-
-                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                        calendar.set(Calendar.MINUTE,minute);
-
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
-
-                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
-                    }
-                };
-
-                new TimePickerDialog(AddGuestActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            public void onClick(View v) {
+                showTimeDialog(time_in);
             }
-        };
+        });
 
-        new DatePickerDialog(AddGuestActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+//        date_time_in.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showDateTimeDialog(date_time_in);
+//            }
+//        });
     }
 
-//    private void showTimeDialog(EditText time_in) {
+//    private void showDateTimeDialog(EditText date_time_in) {
 //        final Calendar calendar=Calendar.getInstance();
-//
-//        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-//            @Override
-//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-//                calendar.set(Calendar.MINUTE,minute);
-//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
-//                time_in.setText(simpleDateFormat.format(calendar.getTime()));
-//            }
-//        };
-//
-//        new TimePickerDialog(AddGuestActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
-//    }
-//
-//    private void showDateDialog(EditText date_in) {
-//        final Calendar calendar= Calendar.getInstance();
 //        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
 //            @Override
 //            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 //                calendar.set(Calendar.YEAR,year);
 //                calendar.set(Calendar.MONTH,month);
 //                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
-//                date_in.setText(simpleDateFormat.format(calendar.getTime()));
 //
+//                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+//                        calendar.set(Calendar.MINUTE,minute);
+//
+//                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+//
+//                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+//                    }
+//                };
+//
+//                new TimePickerDialog(AddGuestActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
 //            }
 //        };
 //
 //        new DatePickerDialog(AddGuestActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 //    }
+
+    private void showTimeDialog(EditText time_in) {
+        final Calendar calendar=Calendar.getInstance();
+
+        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+                time_in.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        };
+
+        new TimePickerDialog(AddGuestActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
+    }
+
+    private void showDateDialog(EditText date_in) {
+        final Calendar calendar= Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yy");
+                date_in.setText(simpleDateFormat.format(calendar.getTime()));
+
+            }
+        };
+
+        new DatePickerDialog(AddGuestActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
     @Override
     public void onBackPressed() {
