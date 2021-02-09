@@ -28,8 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddGuestActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -39,7 +37,7 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
     Button button;
     EditText date_in;
     EditText time_in;
-    EditText date_time_in;
+//    EditText date_time_in;
     EditText et_name;
     DatabaseReference databaseReference;
 
@@ -61,25 +59,7 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
-                Model model = new Model(et_name.getText().toString(), date_in.getText().toString(), time_in.getText().toString(),
-                        spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
 
-                String mkey = databaseReference.child("Guests/").push().getKey();
-                databaseReference.child("Guests").child(date_in.getText().toString()).child(mkey).setValue(model);
-
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("Full name", et_name.getText().toString());
-//                map.put("Time", date_time_in.getText().toString());
-//                map.put("Reason", spinner1.getSelectedItem().toString());
-//                map.put("Who Add", spinner2.getSelectedItem().toString());
-//
-//                databaseReference.setValue(map);
-            }
-        });
 
 
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
@@ -155,6 +135,68 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
 //
 //        new DatePickerDialog(AddGuestActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 //    }
+
+    private Boolean validateUsername(){
+        String fname = et_name.getText().toString();
+
+        if(fname.isEmpty()){
+            et_name.setError("Атыңыз бос болмауы керек");
+            return false;
+        }else{
+            et_name.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateDay(){
+        String day = date_in.getText().toString();
+
+        if (day.isEmpty()){
+            date_in.setError("Күн бос болмауы керек");
+            return false;
+        }else{
+            date_in.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateTime(){
+        String time = time_in.getText().toString();
+
+        if (time.isEmpty()){
+            time_in.setError("Уақыт бос болмауы керек");
+            return false;
+        }else{
+            time_in.setError(null);
+            return true;
+        }
+    }
+
+    public void check(View v){
+        if(!validateUsername() | !validateDay() | !validateTime()){
+            return;
+        }else{
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
+                    Model model = new Model(et_name.getText().toString(), date_in.getText().toString(), time_in.getText().toString(),
+                            spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
+
+                    String mkey = databaseReference.child("Guests/").push().getKey();
+                    databaseReference.child("Guests").child(date_in.getText().toString()).child(mkey).setValue(model);
+
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("Full name", et_name.getText().toString());
+//                map.put("Time", date_time_in.getText().toString());
+//                map.put("Reason", spinner1.getSelectedItem().toString());
+//                map.put("Who Add", spinner2.getSelectedItem().toString());
+//
+//                databaseReference.setValue(map);
+                }
+            });
+        }
+    }
 
     private void showTimeDialog(EditText time_in) {
         final Calendar calendar=Calendar.getInstance();

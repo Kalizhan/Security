@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     GuestsAdapter adapter;
-    FirebaseDatabase database;
+//    FirebaseDatabase database;
     ArrayList<Model> modelArrayList;
     Button btn1, btn2, btn3;
     DatabaseReference databaseReference;
@@ -73,26 +74,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getLastThreeDays();
 
-        getData("01-01-21");
+        getData("Guests");
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData(lastDays.get(2));
+                if (lastDays.size() >= 3){
+                    getData(lastDays.get(2));
+                }else{
+                    Toast.makeText(MainActivity.this, "Бұл бет бос", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData(lastDays.get(1));
+                if (lastDays.size() >= 2){
+                    getData(lastDays.get(1));
+                }else{
+                    Toast.makeText(MainActivity.this, "Бұл бет бос", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getData(lastDays.get(0));
+                if (lastDays.size() >= 1){
+                    getData(lastDays.get(0));
+                }else{
+                    Toast.makeText(MainActivity.this, "Бұл бет бос", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -102,16 +115,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String btnText = "no";
+                int count = 0;
                 lastDays.clear();
-                for (DataSnapshot btn1 : snapshot.getChildren()){
-                    Log.i("infodb", ""+btn1.getKey());
-
-                    lastDays.add(btn1.getKey());
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+//                    count = (int) snapshot1.child("Guests").getChildrenCount();
+//                    Log.i("infodb", ""+count);
+                    lastDays.add(snapshot1.getKey());
                 }
                 Collections.reverse(lastDays);
-                btn1.setText(lastDays.get(2));
-                btn2.setText(lastDays.get(1));
-                btn3.setText(lastDays.get(0));
+                if (lastDays.size() == 1){
+                    btn1.setText("Бос");
+                    btn2.setText("Бос");
+                    btn3.setText(lastDays.get(0));
+                }else if (lastDays.size() == 2){
+                    btn1.setText("Бос");
+                    btn2.setText(lastDays.get(1));
+                    btn3.setText(lastDays.get(0));
+                }else if(lastDays.size() >= 3){
+                    btn1.setText(lastDays.get(2));
+                    btn2.setText(lastDays.get(1));
+                    btn3.setText(lastDays.get(0));
+                }else if(lastDays.isEmpty()){
+                    btn1.setText("Бос");
+                    btn2.setText("Бос");
+                    btn3.setText("Бос");
+                }
+
+                Log.i("Tag", "info" + lastDays.size());
             }
 
             @Override

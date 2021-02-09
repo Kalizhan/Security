@@ -100,6 +100,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@+id/tv_person"/>
                     <Button
+                        android:onClick="check"
                         android:layout_gravity="center"
                         android:id="@+id/btn"
                         android:layout_width="match_parent"
