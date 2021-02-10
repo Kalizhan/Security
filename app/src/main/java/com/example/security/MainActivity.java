@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     GuestsAdapter adapter;
-//    FirebaseDatabase database;
     ArrayList<Model> modelArrayList;
+    ArrayList<Model> size;
     Button btn1, btn2, btn3;
     DatabaseReference databaseReference;
     ArrayList<String> lastDays = new ArrayList<>();
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btn3 = findViewById(R.id.btn3);
 
         modelArrayList = new ArrayList<>();
+        size = new ArrayList<>();
         adapter =new GuestsAdapter(modelArrayList, this);
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getLastThreeDays();
 
-        getData("Guests");
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,18 +109,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        fetch();
+//        fetch();
     }
     private void getLastThreeDays(){
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String btnText = "no";
-                int count = 0;
                 lastDays.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
-//                    count = (int) snapshot1.child("Guests").getChildrenCount();
-//                    Log.i("infodb", ""+count);
                     lastDays.add(snapshot1.getKey());
                 }
                 Collections.reverse(lastDays);
@@ -168,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void fetch() {
+//    private void fetch() {
 //        Query query = FirebaseDatabase.getInstance().getReference().child("Tasks");
 //
 //        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>().setQuery(query, new SnapshotParser<Model>() {
@@ -182,37 +178,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            }
 //        }).build();
 //        Query query = FirebaseDatabase.getInstance().getReference().child("Guests");
-        /*
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.child("Guests").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot guestData : snapshot.getChildren()){
-                        Model model = guestData.getValue(Model.class);
-                        modelArrayList.add(model);
-                    }
-
-                    adapter.notifyDataSetChanged();
-
-                    Log.i("DB", "go");
-                }
-            }
-
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.i("DB", "error");
-            }
-        });
-        */
-
+//
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        databaseReference.child("Guests").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()){
+//                    for (DataSnapshot guestData : snapshot.getChildren()){
+//                        Model model = guestData.getValue(Model.class);
+//                        modelArrayList.add(model);
+//                    }
+//
+//                    adapter.notifyDataSetChanged();
+//
+//                    Log.i("DB", "go");
+//                }
+//            }
+//
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.i("DB", "error");
+//            }
+//        });
+//
+//
 //        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
 //                .setQuery(query, Model.class)
 //                .build();
-
+//
 //        linearLayoutManager = new LinearLayoutManager(this);
 //        recyclerView.setLayoutManager(linearLayoutManager);
 //
@@ -220,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        recyclerView.setAdapter(adapter);
 //
 //        Log.i("DB", "go");
-    }
+//    }
 
 //    @Override
 //    protected void onStart() {

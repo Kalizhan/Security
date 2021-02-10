@@ -3,18 +3,19 @@ package com.example.security;
 import android.widget.Spinner;
 
 public class Model {
-    String fname, day, time, reason, add;
+    String fname, day, time, reason, add, temp;
 
     Model() {
 
     }
 
-    public Model(String fname, String day, String time, String reason, String add) {
+    public Model(String fname, String day, String time, String reason, String add, String temp) {
         this.fname = fname;
         this.day = day;
         this.time = time;
         this.reason = reason;
         this.add = add;
+        this.temp = temp;
     }
 
     public String getFname() {
@@ -55,6 +56,14 @@ public class Model {
 
     public void setAdd(String add) {
         this.add = add;
+    }
+
+    public String getTemp() {
+        return temp;
+    }
+
+    public void setTemp(String temp) {
+        this.temp = temp;
     }
 }
 

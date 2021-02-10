@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
@@ -35,10 +36,8 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
     Toolbar toolbar;
     Spinner spinner1, spinner2;
     Button button;
-    EditText date_in;
-    EditText time_in;
 //    EditText date_time_in;
-    EditText et_name;
+    EditText et_name, date_in, time_in, temp;
     DatabaseReference databaseReference;
 
     @Override
@@ -55,6 +54,7 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
         button = findViewById(R.id.btn);
         date_in=findViewById(R.id.date_input);
         time_in=findViewById(R.id.time_input);
+        temp = findViewById(R.id.temperature);
 //        date_time_in=findViewById(R.id.date_time_input);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -172,8 +172,20 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    private boolean validateTemp(){
+        String temperature = temp.getText().toString();
+
+        if (temperature.isEmpty()){
+            temp.setError("Температураны енгізіңіз!");
+            return false;
+        }else{
+            temp.setError(null);
+            return true;
+        }
+    }
+
     public void check(View v){
-        if(!validateUsername() | !validateDay() | !validateTime()){
+        if(!validateUsername() | !validateDay() | !validateTime() | !validateTemp()){
             return;
         }else{
             button.setOnClickListener(new View.OnClickListener() {
@@ -181,10 +193,13 @@ public class AddGuestActivity extends AppCompatActivity implements NavigationVie
                 public void onClick(View v) {
 //                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Guests").push();
                     Model model = new Model(et_name.getText().toString(), date_in.getText().toString(), time_in.getText().toString(),
-                            spinner1.getSelectedItem().toString(), spinner2.getSelectedItem().toString());
+                            "Себебі: " + spinner1.getSelectedItem().toString(), "Кім енгізді: " + spinner2.getSelectedItem().toString(),
+                            temp.getText().toString()+ " градус");
 
                     String mkey = databaseReference.child("Guests/").push().getKey();
                     databaseReference.child("Guests").child(date_in.getText().toString()).child(mkey).setValue(model);
+
+                    Toast.makeText(AddGuestActivity.this, "Енгізілді!", Toast.LENGTH_SHORT).show();
 
 //                Map<String, Object> map = new HashMap<>();
 //                map.put("Full name", et_name.getText().toString());

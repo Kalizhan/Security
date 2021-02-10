@@ -50,7 +50,7 @@ public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder
 //    }
 
     public class viewHolder extends RecyclerView.ViewHolder{
-        TextView fname, day, time, reason, who_add;
+        TextView fname, day, time, reason, who_add, temperature;
 //        Button btn_del;
 
         public viewHolder(@NonNull View itemView) {
@@ -60,6 +60,7 @@ public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder
             time = itemView.findViewById(R.id.time);
             reason = itemView.findViewById(R.id.reason);
             who_add = itemView.findViewById(R.id.who_add);
+            temperature = itemView.findViewById(R.id.temp);
 //            btn_del = itemView.findViewById(R.id.btn_del);
         }
     }
@@ -81,6 +82,7 @@ public class GuestsAdapter extends RecyclerView.Adapter<GuestsAdapter.viewHolder
         holder.time.setText(item.getTime());
         holder.reason.setText(item.getReason());
         holder.who_add.setText(item.getAdd());
+        holder.temperature.setText(item.getTemp());
     }
 
     @Override
